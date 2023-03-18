@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cura/shared/services/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:cura/shared/widgets/navigation-bar.dart';
 
@@ -15,6 +19,12 @@ class _HealthPageState extends State<HealthPage> {
   TimeOfDay _timeOfDay = TimeOfDay(hour: 10, minute: 30);
 
   TextEditingController _date = TextEditingController();
+
+  final controllerorganizationname = TextEditingController();
+
+  final controllercheckuptype = TextEditingController();
+
+  CollectionReference user = FirebaseFirestore.instance.collection('user');
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -229,6 +239,7 @@ class _HealthPageState extends State<HealthPage> {
                                     ),
                                     Expanded(
                                       child: TextField(
+                                        // controller: _timeOfDay,
                                         decoration: InputDecoration(
                                             // ignore: prefer_const_constructors
                                             contentPadding: EdgeInsets.only(
@@ -281,6 +292,7 @@ class _HealthPageState extends State<HealthPage> {
                                     ),
                                     Expanded(
                                         child: TextField(
+                                      controller: controllercheckuptype,
                                       decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               top: 0,
@@ -321,7 +333,14 @@ class _HealthPageState extends State<HealthPage> {
                                         backgroundColor: const Color.fromARGB(
                                             255, 137, 184, 189),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        await user.add({
+                                          'organizationname': 'rani',
+                                          'date': _date.text,
+                                          'time': _timeOfDay.toString(),
+                                          'checkuptype': 'fever',
+                                        });
+
                                         showDialog(
                                             context: context,
                                             builder: (context) {
